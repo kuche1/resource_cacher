@@ -1,6 +1,11 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <stdio.h>
+
+#include "utils.h"
 
 int str_copy(char **to, char *from){
     int len = strlen(from); // TODO can be optimized away
@@ -30,4 +35,39 @@ int str_append(char **str_to_append_to, char *data_to_append){
     *str_to_append_to = new_str;
 
     return 0;
+}
+
+int create_folder(char *path){
+    if(mkdir(path, 0777)){ // TODO perms might be too loose
+        fprintf(stderr, "ERROR: could not create directory `%s`\n", path);
+        return 1;
+    }
+    return 0;
+}
+
+int create_folder_if_not_already(char *path){
+    if(folder_exists(path)){
+        return 0;
+    }
+    if(create_folder(path)){
+        return 1;
+    }
+    return 0;
+}
+
+int assert_folder_exists(char *path){
+    if(folder_exists(path)){
+        return 0;
+    }
+    printf("ERROR: directory doesn't exist `%s`\n", path);
+    return 1;
+}
+
+int folder_exists(char *path){
+    DIR *dir = opendir(path);
+    if(!dir){
+        return 0;
+    }
+    closedir(dir);
+    return 1;
 }

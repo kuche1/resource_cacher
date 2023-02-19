@@ -1,8 +1,9 @@
 
+// TODO
+// remove all debug printfs
+
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/stat.h>
-#include <dirent.h>
 
 #include "resource_cacher.h"
 #include "sha-2/sha-256.h"
@@ -55,19 +56,19 @@ int rc_init(void){ // TODO check if init was already called
         goto error;
     }
     if(str_copy(&rc_dir_data, data_dir)) goto error;
-    if(rc_ass_fol_exs(rc_dir_data)) goto error;
+    if(assert_folder_exists(rc_dir_data)) goto error;
 
     if(str_copy(&rc_dir_data_versioned, rc_dir_data)) goto error;
     if(str_append(&rc_dir_data_versioned, "/" RC_DATA_VERSION)) goto error;
-    if(rc_create_folder_if_not_already(rc_dir_data_versioned)) goto error;
+    if(create_folder_if_not_already(rc_dir_data_versioned)) goto error;
 
     if(str_copy(&rc_dir_hash, rc_dir_data_versioned)) goto error;
     if(str_append(&rc_dir_hash, "/sha256")) goto error; // TODO hash alg shouldn't be hardcoded
-    if(rc_create_folder_if_not_already(rc_dir_hash)) goto error;
+    if(create_folder_if_not_already(rc_dir_hash)) goto error;
 
     if(str_copy(&rc_dir_redirect, rc_dir_data_versioned)) goto error;
-    if(str_append(&rc_dir_redirect, "/redirect")) goto error; // TODO hash alg shouldn't be hardcoded
-    if(rc_create_folder_if_not_already(rc_dir_redirect)) goto error;
+    if(str_append(&rc_dir_redirect, "/redirect")) goto error;
+    if(create_folder_if_not_already(rc_dir_redirect)) goto error;
 
     return 0;
 error:
@@ -123,11 +124,11 @@ int rc_cache_data_str(int data_len, char* data, char hash_as_str[65]){
 
     // TODO add integrity check, a simple `touch all-is-good` might be sufficient
     // simply using the folder name MIGHT be sufficient, but if we are to do so, a check mechanism needs to be implemented
-    if(rc_folder_exists(folder)){ // using this super-basic check for now, assuming everything is fine if the folder exists
+    if(folder_exists(folder)){ // using this super-basic check for now, assuming everything is fine if the folder exists
         goto return_;
     }
 
-    if(rc_create_folder(folder)) goto error;
+    if(create_folder(folder)) goto error;
 
     if(str_copy(&file, folder)) goto error;
     if(str_append(&file, "/" RC_DATA_HASH_FILE_DATA)) goto error;
@@ -177,7 +178,7 @@ int rc_associate_key_str_to_data_str(char *key, int data_len, char *data){
         sprintf(c_sane, "%02x", c); // TODO is it worth using snprintf instead? // TODO it turns out that sorintf also copies the \0
         if(str_append(&folder, "/")) goto error;
         if(str_append(&folder, c_sane)) goto error;
-        if(rc_create_folder_if_not_already(folder)) goto error;
+        if(create_folder_if_not_already(folder)) goto error;
         // TODO maybe we can replace those 3 ^^^ (and any other similar code blocks) with `opendir` ?
     }
 
@@ -198,42 +199,5 @@ int rc_associate_key_str_to_data_str(char *key, int data_len, char *data){
     return 0;
 error:
     free(folder);
-    return 1;
-}
-
-///// helper functions
-
-int rc_create_folder(char *path){
-    if(mkdir(path, 0777)){ // TODO perms might be too loose
-        fprintf(stderr, "ERROR: could not create directory `%s`\n", path);
-        return 1;
-    }
-    return 0;
-}
-
-int rc_create_folder_if_not_already(char *path){
-    if(rc_folder_exists(path)){
-        return 0;
-    }
-    if(rc_create_folder(path)){
-        return 1;
-    }
-    return 0;
-}
-
-int rc_ass_fol_exs(char *path){ // assert_folder_existance
-    if(rc_folder_exists(path)){
-        return 0;
-    }
-    printf("ERROR: directory doesn't exist `%s`\n", path);
-    return 1;
-}
-
-int rc_folder_exists(char *path){
-    DIR *dir = opendir(path);
-    if(!dir){
-        return 0;
-    }
-    closedir(dir);
     return 1;
 }
