@@ -19,4 +19,10 @@ void rc_deinit(void);
 int RC_WARN_UNUSED rc_cache_data_str(int data_len, char* data, char hash_as_str[65]);
 int RC_WARN_UNUSED rc_associate_key_str_to_data_str(char *key, int data_len, char *data);
 
+int RC_WARN_UNUSED rc_get_dataPATH_by_keyURL(char *keyURL, char **dataPATH);
+int RC_WARN_UNUSED rc_convert_keyURL_to_keyPATH(char *key, int create_folders_along_the_way, char **ret);
+
+#define RC_CREATE_FOLDERS 1
+#define RC_DONT_CREATE_FOLDERS 0
+
 #endif // #ifndef H_RESOURCE_CACHER

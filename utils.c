@@ -7,6 +7,16 @@
 
 #include "utils.h"
 
+// TODO use this instead of a regular malloc
+int str_new(int size, char **ret){
+    char *str = malloc((size+1) * sizeof(**ret));
+    if(str == NULL){
+        return 1;
+    }
+    *ret = str;
+    return 0;
+}
+
 int str_copy(char **to, char *from){
     int len = strlen(from); // TODO can be optimized away
     char *copy = malloc(sizeof(*from) * (len+1));
@@ -34,6 +44,22 @@ int str_append(char **str_to_append_to, char *data_to_append){
 
     *str_to_append_to = new_str;
 
+    return 0;
+}
+
+int str_insert(char **str_to_insert_to, char *data_to_insert){
+    int len = strlen(*str_to_insert_to);
+    int len_data_to_insert = strlen(data_to_insert);
+    int new_len = len + len_data_to_insert;
+
+    char *new_str = realloc(*str_to_insert_to, sizeof(**str_to_insert_to) * (new_len+1));
+    if(new_str == NULL){
+        return 1;
+    }
+    memmove(&new_str[len_data_to_insert], *str_to_insert_to, len+1);
+    memcpy(new_str, data_to_insert, len_data_to_insert);
+
+    *str_to_insert_to = new_str;
     return 0;
 }
 

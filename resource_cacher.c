@@ -1,6 +1,7 @@
 
 // TODO
 // remove all debug printfs
+// most occurances of `strlen` can be optimized
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,12 +43,23 @@ int rc_test(void){
         }
     }
 
+    {
+        char *path;
+        if(rc_get_dataPATH_by_keyURL("test-01", &path)){
+            printf("AAAAAAA\n");
+            goto error;
+        }
+        printf("path is : %s\n", path);
+    }
+
     rc_deinit();
     return 0;
 error:
     rc_deinit();
     return 1;
 }
+
+//////// interface functions
 
 int rc_init(void){ // TODO check if init was already called
     char *data_dir = getenv(RC_ENV_DATA_DIR); // TODO get from command line and not from env?
@@ -105,8 +117,9 @@ int rc_cache_data_str(int data_len, char* data, char hash_as_str[65]){
 
     long unsigned int i;
     // TODO I hate this and I hope the compiler optimizes it away
-    for(i=0; i < sizeof(hash)/sizeof(*hash); ++i){
-        sprintf(&hash_as_str[i*2], "%02x", hash[i]); // TODO is it worth using snprintf instead?
+    for(i=0; i < UT_BUF_LEN(hash); ++i){
+        snprintf(&hash_as_str[i*2], 65-i*2, "%02x", hash[i]);
+        // TODO check return
     }
     hash_as_str[i*2] = 0; // TODO not needed since `sprintf` copies the \0
 
@@ -175,7 +188,8 @@ int rc_associate_key_str_to_data_str(char *key, int data_len, char *data){
         if(c == 0){
             break;
         }
-        sprintf(c_sane, "%02x", c); // TODO is it worth using snprintf instead? // TODO it turns out that sorintf also copies the \0
+        snprintf(c_sane, UT_BUF_LEN(c_sane), "%02x", c); // TODO it turns out that sorintf also copies the \0
+        // TODO check return value
         if(str_append(&folder, "/")) goto error;
         if(str_append(&folder, c_sane)) goto error;
         if(create_folder_if_not_already(folder)) goto error;
@@ -199,5 +213,82 @@ int rc_associate_key_str_to_data_str(char *key, int data_len, char *data){
     return 0;
 error:
     free(folder);
+    return 1;
+}
+
+// TODO rename everywhere else to follow this convention
+int rc_get_dataPATH_by_keyURL(char *keyURL, char **dataPATH){
+    char *keyPATH = NULL;
+    FILE *f = NULL;
+    char *lcl_dataPATH = NULL;
+    if(rc_convert_keyURL_to_keyPATH(keyURL, RC_DONT_CREATE_FOLDERS, &keyPATH)) goto error;
+
+    f = fopen(keyPATH, "r");
+    if(!f) goto error;
+    fseek(f, 0L, SEEK_END);
+    int file_size = ftell(f);
+    rewind(f);
+    if(str_new(file_size, &lcl_dataPATH)) goto error;
+    printf("===============2.21\nlcl_dataPATH==%p\nfile_size=%d\n", lcl_dataPATH, file_size);
+    fread(lcl_dataPATH, file_size, 1, f);
+    // TODO check ret value
+    lcl_dataPATH[file_size] = 0;
+    fclose(f);
+
+    // TODO can be improved
+    if(str_insert(&lcl_dataPATH, "/")) goto error;
+    if(str_insert(&lcl_dataPATH, rc_dir_hash)) goto error;
+
+    // TODO increase access counter
+
+    *dataPATH = lcl_dataPATH;
+
+    free(keyPATH);
+    return 0;
+error:
+    free(keyPATH);
+    if(!f) fclose(f);
+    free(lcl_dataPATH);
+    return 1;
+}
+
+//////// generic functions
+
+// TODO change to `get_` instead of `convert_` ?
+int rc_convert_keyURL_to_keyPATH(char *key, int create_folders_along_the_way, char **ret){
+    char *folder = NULL;
+    char *file = NULL;
+
+    if(str_copy(&folder, rc_dir_redirect)) goto error;
+
+    char c;
+    char c_sane[3];
+    // TODO this seems too inefficient for my liking
+    // hopefully the compiler optimizes it away
+    // or the realloc implementation is good enough
+    while(1){
+        c = *key++;
+        if(c == 0){
+            break;
+        }
+        snprintf(c_sane, UT_BUF_LEN(c_sane), "%02x", c); // `\0` also copied
+        // TODO check return value
+        if(str_append(&folder, "/")) goto error;
+        if(str_append(&folder, c_sane)) goto error;
+        if(create_folders_along_the_way){
+            if(create_folder_if_not_already(folder)) goto error;
+        }
+        // TODO maybe we can replace those 3 fnc calls ^^^ (and any other similar code blocks) with `opendir` ?
+    }
+
+    file = folder;
+    folder = NULL;
+    if(str_append(&file, "/" RC_DATA_REDIRECT_FILE_TARGET)) goto error;
+
+    *ret = file;
+    return 0;
+error:
+    free(folder);
+    free(file);
     return 1;
 }
