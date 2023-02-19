@@ -1,6 +1,6 @@
 
-#include<string.h>
-#include<stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 int str_copy(char **to, char *from){
     int len = strlen(from); // TODO can be optimized away

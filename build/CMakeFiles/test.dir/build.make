@@ -94,7 +94,7 @@ test: CMakeFiles/test.dir/tests.c.o
 test: CMakeFiles/test.dir/build.make
 test: libresource_cacher.a
 test: libsha-256.a
-test: libstrutils.a
+test: libutils.a
 test: CMakeFiles/test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/me/coding/resource_cacher/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)

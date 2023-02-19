@@ -143,17 +143,17 @@ sha-256/fast:
 .PHONY : sha-256/fast
 
 #=============================================================================
-# Target rules for targets named strutils
+# Target rules for targets named utils
 
 # Build rule for target.
-strutils: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 strutils
-.PHONY : strutils
+utils: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 utils
+.PHONY : utils
 
 # fast build rule for target.
-strutils/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/strutils.dir/build.make CMakeFiles/strutils.dir/build
-.PHONY : strutils/fast
+utils/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utils.dir/build.make CMakeFiles/utils.dir/build
+.PHONY : utils/fast
 
 #=============================================================================
 # Target rules for targets named test
@@ -216,30 +216,6 @@ sha-2/sha-256.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sha-256.dir/build.make CMakeFiles/sha-256.dir/sha-2/sha-256.c.s
 .PHONY : sha-2/sha-256.c.s
 
-strutils.o: strutils.c.o
-.PHONY : strutils.o
-
-# target to build an object file
-strutils.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/strutils.dir/build.make CMakeFiles/strutils.dir/strutils.c.o
-.PHONY : strutils.c.o
-
-strutils.i: strutils.c.i
-.PHONY : strutils.i
-
-# target to preprocess a source file
-strutils.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/strutils.dir/build.make CMakeFiles/strutils.dir/strutils.c.i
-.PHONY : strutils.c.i
-
-strutils.s: strutils.c.s
-.PHONY : strutils.s
-
-# target to generate assembly for a file
-strutils.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/strutils.dir/build.make CMakeFiles/strutils.dir/strutils.c.s
-.PHONY : strutils.c.s
-
 tests.o: tests.c.o
 .PHONY : tests.o
 
@@ -264,6 +240,30 @@ tests.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/tests.c.s
 .PHONY : tests.c.s
 
+utils.o: utils.c.o
+.PHONY : utils.o
+
+# target to build an object file
+utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utils.dir/build.make CMakeFiles/utils.dir/utils.c.o
+.PHONY : utils.c.o
+
+utils.i: utils.c.i
+.PHONY : utils.i
+
+# target to preprocess a source file
+utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utils.dir/build.make CMakeFiles/utils.dir/utils.c.i
+.PHONY : utils.c.i
+
+utils.s: utils.c.s
+.PHONY : utils.s
+
+# target to generate assembly for a file
+utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/utils.dir/build.make CMakeFiles/utils.dir/utils.c.s
+.PHONY : utils.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -274,20 +274,20 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... resource_cacher"
 	@echo "... sha-256"
-	@echo "... strutils"
 	@echo "... test"
+	@echo "... utils"
 	@echo "... resource_cacher.o"
 	@echo "... resource_cacher.i"
 	@echo "... resource_cacher.s"
 	@echo "... sha-2/sha-256.o"
 	@echo "... sha-2/sha-256.i"
 	@echo "... sha-2/sha-256.s"
-	@echo "... strutils.o"
-	@echo "... strutils.i"
-	@echo "... strutils.s"
 	@echo "... tests.o"
 	@echo "... tests.i"
 	@echo "... tests.s"
+	@echo "... utils.o"
+	@echo "... utils.i"
+	@echo "... utils.s"
 .PHONY : help
 
 

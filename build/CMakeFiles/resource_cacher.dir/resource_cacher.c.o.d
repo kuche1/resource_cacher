@@ -42,4 +42,4 @@ CMakeFiles/resource_cacher.dir/resource_cacher.c.o: \
  /usr/include/stdint.h /usr/include/bits/wchar.h \
  /usr/include/bits/stdint-uintn.h /usr/include/string.h \
  /usr/include/bits/types/locale_t.h /usr/include/bits/types/__locale_t.h \
- /usr/include/strings.h /home/me/coding/resource_cacher/strutils.h
+ /usr/include/strings.h /home/me/coding/resource_cacher/utils.h

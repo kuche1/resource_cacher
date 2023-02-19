@@ -125,6 +125,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/resource_cacher.dir/DependInfo.cmake"
   "CMakeFiles/sha-256.dir/DependInfo.cmake"
-  "CMakeFiles/strutils.dir/DependInfo.cmake"
+  "CMakeFiles/utils.dir/DependInfo.cmake"
   "CMakeFiles/test.dir/DependInfo.cmake"
   )

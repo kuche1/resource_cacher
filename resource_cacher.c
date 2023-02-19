@@ -1,12 +1,12 @@
 
-#include<stdlib.h>
-#include<stdio.h>
-#include<sys/stat.h>
-#include<dirent.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <dirent.h>
 
-#include"resource_cacher.h"
-#include"sha-2/sha-256.h"
-#include"strutils.h"
+#include "resource_cacher.h"
+#include "sha-2/sha-256.h"
+#include "utils.h"
 
 char *rc_dir_data = NULL;           // `/tmp/cache'
 char *rc_dir_data_versioned = NULL; // `/tmp/cache/v1`
