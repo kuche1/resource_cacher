@@ -1,0 +1,2 @@
+/usr/bin/ar qc libresource_cacher.a CMakeFiles/resource_cacher.dir/resource_cacher.c.o
+/usr/bin/ranlib libresource_cacher.a
