@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/test.dir/tests.c.o -o test  libresource_cacher.a libsha-256.a libutils.a 

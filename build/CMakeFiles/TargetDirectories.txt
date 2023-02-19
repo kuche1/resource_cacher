@@ -1,6 +1,0 @@
-/home/me/coding/resource_cacher/build/CMakeFiles/resource_cacher.dir
-/home/me/coding/resource_cacher/build/CMakeFiles/sha-256.dir
-/home/me/coding/resource_cacher/build/CMakeFiles/utils.dir
-/home/me/coding/resource_cacher/build/CMakeFiles/test.dir
-/home/me/coding/resource_cacher/build/CMakeFiles/edit_cache.dir
-/home/me/coding/resource_cacher/build/CMakeFiles/rebuild_cache.dir
